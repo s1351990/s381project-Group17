@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Schedules</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4A90E2;
+            --secondary: #5C6AC4;
+            --background: #f5f7fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+            --danger: #e74c3c;
+            --edit: #27ae60;
+            --shadow-light: rgba(255, 255, 255, 0.8);
+            --shadow-dark: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary: #5C6AC4;
+            --secondary: #4A90E2;
+            --background: #1a1f36;
+            --text: #ffffff;
+            --card-bg: #2d3446;
+            --danger: #ff6b81;
+            --edit: #7bed9f;
+            --shadow-light: rgba(255, 255, 255, 0.05);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .items-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 
+                8px 8px 15px var(--shadow-dark),
+                -8px -8px 15px var(--shadow-light);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                12px 12px 20px var(--shadow-dark),
+                -12px -12px 20px var(--shadow-light);
+        }
+
+        .item-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .item-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-description {
+            color: var(--text);
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .delete-button, .edit-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .delete-button {
+            background: var(--danger);
+            color: white;
+        }
+
+        .edit-button {
+            background: var(--edit);
+            color: white;
+        }
+
+        .delete-button:hover, .edit-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .delete-button:active, .edit-button:active {
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 
+                4px 4px 10px var(--shadow-dark),
+                -4px -4px 10px var(--shadow-light);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            background: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .item-content {
+                padding-right: 0;
+            }
+
+            .buttons {
+                justify-content: stretch;
+            }
+
+            .delete-button, .edit-button {
+                flex: 1;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .item.deleting {
+            animation: pulse 0.5s ease infinite;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fas fa-calendar-alt" style="margin-right: 0.5rem;"></i>
+            My Schedules
+        </h1>
+        <ul class="items-list">
+            <% items.forEach((item, index) => { %>
+                <li class="item" style="animation-delay: <%= index * 0.1 %>s">
+                    <div class="item-content">
+                        <div class="item-name">
+                            <i class="fas fa-clock" style="margin-right: 0.5rem; color: var(--primary);"></i>
+                            <%= item.name %>
+                        </div>
+                        <div class="item-description"><%= item.description %></div>
+                    </div>
+                    <div class="buttons">
+                        <form action="/delete/<%= item._id %>" method="post" style="display:inline;">
+                            <button class="delete-button" type="submit">
+                                <i class="fas fa-trash-alt"></i>
+                                Delete
+                            </button>
+                        </form>
+                        <a class="edit-button" href="/update/<%= item._id %>">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </a>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const item = e.target.closest('.item');
+                item.classList.add('deleting');
+            });
+        });
+        
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (window.hoverSound) {
+                    hoverSound.currentTime = 0;
+                    hoverSound.play();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Schedule</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Light theme */
+            --bg-light: #e0e5ec;
+            --text-light: #2c3e50;
+            --input-bg-light: #ffffff;
+            --shadow-light: 10px 10px 20px #a3b1c6, -10px -10px 20px #ffffff;
+            --shadow-light-inset: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+            --primary-light: #4a90e2;
+            --primary-hover-light: #357abd;
+            
+            /* Dark theme */
+            --bg-dark: #1a1a1a;
+            --text-dark: #ffffff;
+            --input-bg-dark: #2d2d2d;
+            --shadow-dark: 10px 10px 20px #0d0d0d, -10px -10px 20px #272727;
+            --shadow-dark-inset: inset 5px 5px 10px #0d0d0d, inset -5px -5px 10px #272727;
+            --primary-dark: #64b5f6;
+            --primary-hover-dark: #4a90e2;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: var(--bg-dark);
+            --text-main: var(--text-dark);
+            --input-bg: var(--input-bg-dark);
+            --shadow-main: var(--shadow-dark);
+            --shadow-inset: var(--shadow-dark-inset);
+            --primary: var(--primary-dark);
+            --primary-hover: var(--primary-hover-dark);
+        }
+
+        [data-theme="light"] {
+            --bg-main: var(--bg-light);
+            --text-main: var(--text-light);
+            --input-bg: var(--input-bg-light);
+            --shadow-main: var(--shadow-light);
+            --shadow-inset: var(--shadow-light-inset);
+            --primary: var(--primary-light);
+            --primary-hover: var(--primary-hover-light);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: var(--text-main);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: var(--input-bg);
+            box-shadow: var(--shadow-main);
+            color: var(--text-main);
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+            box-shadow: var(--shadow-inset);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 3rem;
+            background: var(--bg-main);
+            border-radius: 20px;
+            box-shadow: var(--shadow-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(74, 144, 226, 0.1), transparent);
+            z-index: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-size: 1rem;
+            box-shadow: var(--shadow-inset);
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button[type="submit"]:hover::before {
+            left: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-inset);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .form-group {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+
+        /* Floating label animation */
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 0;
+            left: 10px;
+            background: var(--bg-main);
+            padding: 0 5px;
+            font-size: 0.8rem;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus + label,
+        .form-group textarea:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:not(:placeholder-shown) + label {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <button class="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <h1>Create Schedule</h1>
+        <form action="/create" method="POST">
+            <div class="form-group">
+                <input type="text" id="name" name="name" required placeholder="Enter schedule name">
+                <label for="name">Schedule Name</label>
+            </div>
+            
+            <div class="form-group">
+                <textarea id="description" name="description" required placeholder="Enter description"></textarea>
+                <label for="description">Description</label>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit">Create Schedule</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('invalid', (e) => {
+                e.preventDefault();
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 500);
+            });
+        });
+    </script>
+</body>
+</html>
