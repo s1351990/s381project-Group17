@@ -31,7 +31,7 @@
 - **models (folder):** Includes Mongoose model files for User and Item, defining the structure of the data stored in MongoDB.
 
 ## Cloud-Based Server URL
-- [Test Server URL](https://.render.com/)
+- [Test Server URL](https://s381project-group17.onrender.com/)
 
 ## Operation Guides
 
