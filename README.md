@@ -57,31 +57,31 @@
   - **Delete:** `POST /delete/:id` - Remove an schedule by ID.
   
 - **CURL Testing Commands:**
-  - Register: curl -X POST http://localhost:8099/register \
+  - Register: curl -X POST https://s381project-group17.onrender.com/register \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=testuser&email=test@example.com&password=testpass"
   
-  - login: curl -X POST http://localhost:8099/login \
+  - login: curl -X POST https://s381project-group17.onrender.com/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=testuser&password=testpass" \
   -v -c cookies.txt
   
-  - Create: curl -X POST http://localhost:8099/create \
+  - Create: curl -X POST https://s381project-group17.onrender.com/create \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -b cookies.txt \
   -d "title=Test Item&description=This is a test item"
   
-  - Read: curl -X GET http://localhost:8099/read \
+  - Read: curl -X GET https://s381project-group17.onrender.com/read \
   -b cookies.txt \
   -v
   
-  - Update: curl -X POST http://localhost:8099/update/:id \
+  - Update: curl -X POST https://s381project-group17.onrender.com/update/:id \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -b cookies.txt \
   -d "title=Updated Item&description=This is updated"
 
-  - Delete: curl -X POST http://localhost:8099/delete/:id \
+  - Delete: curl -X POST https://s381project-group17.onrender.com/delete/:id \
   -b cookies.txt
   
-  - logout: curl -X GET http://localhost:8099/logout \
+  - logout: curl -X GET https://s381project-group17.onrender.com/logout \
   -b cookies.txt
